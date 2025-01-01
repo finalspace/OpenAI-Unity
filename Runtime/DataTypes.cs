@@ -127,10 +127,62 @@ namespace OpenAI
         public string Logprobs { get; set; }
     }
 
+    /*
     public struct ChatMessage
     {
         public string Role { get; set; }
         public string Content { get; set; }
+    }
+
+    */
+
+    public class ChatMessage
+    {
+        [JsonProperty("role")]
+        public string Role { get; set; }
+
+        [JsonProperty("content")]
+        public string Content { get; set; }
+    }
+    
+    // ChatMessage Extend
+    public abstract class MessageContect
+    {
+        [JsonProperty("type")]
+        public abstract string Type { get; }
+    }
+
+    public class TextContent : MessageContect
+    {
+        [JsonProperty("type")]
+        public override string Type => "text";
+
+        [JsonProperty("text")]
+        public string Text { get; set; }
+    }
+
+    public struct ImageUrlObj
+    {
+        [JsonProperty("url")]
+        public string Url { get; set; }
+
+        [JsonProperty("detail")]
+        public string Detail { get; set; }
+    }
+
+    public class ImageUrlContect : MessageContect
+    {
+        [JsonProperty("type")]
+        public override string Type => "image_url";
+
+        [JsonProperty("image_url")]
+        public ImageUrlObj ImageUrl { get; set; }
+    }
+
+    public class ChatMessageRich : ChatMessage
+    {
+        [JsonProperty("content")]
+        public new List<MessageContect> Content { get; set; }
     }
     
     #endregion
